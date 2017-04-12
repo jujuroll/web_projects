@@ -20,14 +20,14 @@ var boardOption = [{
         columns: 3
     }];
 
-init();
-function init()
+$(document).ready(function ()
 {
     eventListeners();
-}
+});
 
 function eventListeners()
 {
+    console.log("added event listeners");
     var mode = boardOption[1];
     $(".startBtn").click(function ()
     {
@@ -37,11 +37,13 @@ function eventListeners()
         $(".game").show();
     });
 
-    $(".game").on("drag", "button", function (event)
-    {
-       updatePieces();
-       event.stopPropagation();
+    $(".box").draggable({
+        helper: "clone",
     });
+    $("body").on("dragstart",".box", dragStartHandler);
+    $("body").on("drop",".box", dropHandler);
+    $("body").on("dragover",".box", dragOverHandler);
+
 
     $("#reset").click( function ()
     {
@@ -50,6 +52,30 @@ function eventListeners()
     });
 }
 
+function dragOverHandler(event)
+{
+    event.preventDefault();
+    console.log("dragOver");
+    event.stopPropagation();
+}
+
+function dropHandler(event)
+{
+    console.log("dropHandler");
+    event.stopPropagation();
+}
+
+function dragStartHandler(event)
+{
+    console.log("ondragstart event:" + event);
+    var originalEvent = event.originalEvent;
+    var currentElement = originalEvent.target;
+    // set the data for browsers like Firefox to determine what to drag
+    originalEvent.dataTransfer.setData("text", $(currentElement).data("task-id"));
+    originalEvent.dataTransfer.effectAllowed = "move";
+    updatePieces();
+    event.stopPropagation();
+}
 function generateBoard(mode)
 {
     var shuffleArray = mode.array;
@@ -61,12 +87,12 @@ function generateBoard(mode)
     {
         if(shuffleArray[i] !== "X")
         {
-            $('.board').append("<div class='col-lg-" + columns + "col-md-"+ columns + " col-sm-" + columns + " col-xs-" + columns + "'><button class='box' draggable='true'>" + shuffleArray[i] + "</button></div>");
+            $('.board').append("<div class='col-lg-" + columns + "col-md-"+ columns + " col-sm-" + columns + " col-xs-" + columns + "'><div class='box' draggable='true' dropzone='move'>" + shuffleArray[i] + "</div></div>");
 
         }
         else
         {
-            $('.board').append("<div class='col-lg-" + columns + "col-md-" + columns + " col-sm-" + columns + " col-xs-" + columns + "'><button class='box' id='lastBtn' draggable='true'>" + shuffleArray[i] + "</button></div>");
+            $('.board').append("<div class='col-lg-" + columns + "col-md-" + columns + " col-sm-" + columns + " col-xs-" + columns + "'><div class='box' id='lastBtn' draggable='true' dropzone='move'>" + shuffleArray[i] + "</div></div>");
         }
         prevId = shuffleArray[i];
     }
@@ -74,7 +100,7 @@ function generateBoard(mode)
 
 function updatePieces()
 {
-
+    console.log("update pieces");
 }
 
 /*Fisher-Yates Shuffle*/
