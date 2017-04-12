@@ -37,9 +37,6 @@ function eventListeners()
         $(".game").show();
     });
 
-    $(".box").draggable({
-        helper: "clone",
-    });
     $("body").on("dragstart",".box", dragStartHandler);
     $("body").on("drop",".box", dropHandler);
     $("body").on("dragover",".box", dragOverHandler);
@@ -87,12 +84,18 @@ function generateBoard(mode)
     {
         if(shuffleArray[i] !== "X")
         {
-            $('.board').append("<div class='col-lg-" + columns + "col-md-"+ columns + " col-sm-" + columns + " col-xs-" + columns + "'><div class='box' draggable='true' dropzone='move'>" + shuffleArray[i] + "</div></div>");
+            $('.board').append("<div class='col-lg-" + columns + "col-md-"+
+            columns + " col-sm-" + columns + " col-xs-" + columns + "'>\
+            <div class='box' draggable='true' dropzone='move'>" + shuffleArray[i] +
+            "</div></div>");
 
         }
         else
         {
-            $('.board').append("<div class='col-lg-" + columns + "col-md-" + columns + " col-sm-" + columns + " col-xs-" + columns + "'><div class='box' id='lastBtn' draggable='true' dropzone='move'>" + shuffleArray[i] + "</div></div>");
+            $('.board').append("<div class='col-lg-" + columns + "col-md-" +
+            columns + " col-sm-" + columns + " col-xs-" + columns +
+            "'><div class='box' id='lastBtn' draggable='true' dropzone='move'>" +
+            shuffleArray[i] + "</div></div>");
         }
         prevId = shuffleArray[i];
     }
