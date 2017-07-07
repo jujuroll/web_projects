@@ -54,6 +54,11 @@ h1{
     text-align: center;
 }
 
+.box:hover
+{
+    background: black;
+}
+
 .col-lg-4{
     width: 22.5%;
     height: 22.5%;

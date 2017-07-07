@@ -2,21 +2,46 @@
  * Created by Jaleesa on 04/09/17.
  */
 
-var puzzlePieces = [];
+class Point {
+    constructor(x, y)
+    {
+        this.x = x;
+        this.y = y;
+    }
+}
+
+class PuzzlePiece {
+    constructor(value){
+        this.value = value;
+        this.htmlInfo = "";
+    }
+}
+
+class Board
+{
+    constructor() {
+        this.puzzlePieces = [];
+    }
+
+    addPuzzlePiece(piece)
+    {
+        this.puzzlePieces.push(piece);
+    }
+}
 
 var boardOption = [{
         mode:"Easy",
-        array:[0, 1, 2, "X"],
+        array:[1, 2, 3, "X"],
         columns: 6
     },
     {
         mode:"Medium",
-        array:[0, 1, 2, 3, 4, 5, 6, 7, "X"],
+        array:[1, 2, 3, 4, 5, 6, 7, 8, "X"],
         columns: 4
     },
     {
         mode:"Hard",
-        array:[0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10,"X"],
+        array:[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, "X"],
         columns: 3
     }];
 
@@ -25,6 +50,7 @@ $(document).ready(function ()
     eventListeners();
 });
 
+var gameBoard = new Board();
 function eventListeners()
 {
     console.log("added event listeners");
@@ -73,31 +99,23 @@ function dragStartHandler(event)
     updatePieces();
     event.stopPropagation();
 }
+
 function generateBoard(mode)
 {
     var shuffleArray = mode.array;
     var columns = mode.columns;
     // While there remain elements to shuffle…
     shuffleArray = shuffle(shuffleArray);
-    var prevId = -1;
     for(var i = 0; i < shuffleArray.length; i ++)
     {
-        if(shuffleArray[i] !== "X")
-        {
-            $('.board').append("<div class='col-lg-" + columns + "col-md-"+
+        var piece = new PuzzlePiece(shuffleArray[i]);
+        var html = "<div class='col-lg-" + columns + "col-md-"+
             columns + " col-sm-" + columns + " col-xs-" + columns + "'>\
             <div class='box' draggable='true' dropzone='move'>" + shuffleArray[i] +
-            "</div></div>");
-
-        }
-        else
-        {
-            $('.board').append("<div class='col-lg-" + columns + "col-md-" +
-            columns + " col-sm-" + columns + " col-xs-" + columns +
-            "'><div class='box' id='lastBtn' draggable='true' dropzone='move'>" +
-            shuffleArray[i] + "</div></div>");
-        }
-        prevId = shuffleArray[i];
+            "</div></div>";
+        piece.htmlInfo = html;
+        $('.board').append(piece.htmlInfo);
+        gameBoard.addPuzzlePiece(piece);
     }
 }
 
